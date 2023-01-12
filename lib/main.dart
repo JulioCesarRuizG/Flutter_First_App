@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_first_project/views/login_view.dart';
+import 'package:flutter_first_project/views/register_view.dart';
 
 import 'firebase_options.dart';
 
@@ -78,6 +79,10 @@ void main() {
       primarySwatch: Colors.blue,
     ),
     home: const HomePage(),
+    routes: {
+      "/login/": (context) => const LoginView(),
+      "/register/": (context) => const RegisterView(),
+    },
   ));
 }
 
@@ -86,26 +91,28 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Home Page")),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        ),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
+    return FutureBuilder(
+      future: Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      ),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+            /*
               final user = FirebaseAuth.instance.currentUser;
               final emailVerified = user?.emailVerified ?? false;
-              if (emailVerified) {
-              } else {}
-
+              if (!emailVerified) {
+                return const EmailVerificationView();
+              }
               return const Text("Done");
-            default:
-              return const Text("Loading");
-          }
-        },
-      ),
+              */
+            return const LoginView();
+          default:
+            return Scaffold(
+                appBar: AppBar(title: const Text("Login")),
+                body: const Center(child: CircularProgressIndicator()));
+        }
+      },
     );
   }
 }
